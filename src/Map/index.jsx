@@ -42,7 +42,7 @@ const MapComponent = () => {
     setCenter(center);
   };
 
-  return loading || error
+  return !prevCoords && (loading || error)
     ? <div>{error ? 'error' : 'loading'}</div>
     : <div className={s.map}>
         <Map center={center || coords} zoom={zoom} defaultHeight={remToPx(24)} attribution={false}
