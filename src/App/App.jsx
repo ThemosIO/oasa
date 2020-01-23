@@ -75,9 +75,9 @@ const App = () => {
     try {
       const { data } = await GET_ROUTES_FOR_STOP(stopCode);
       const curatedData = (data || arr)
-        .filter(route => route.route_code != null && route.LineID != null)
+        .filter(route => route.routeCode != null && route.LineID != null)
         .map(route => ({
-          route: route.route_code,
+          route: route.routeCode,
           line: route.LineID,
           title: route.RouteDescr || route.LineDescr,
         }));
@@ -117,6 +117,14 @@ const App = () => {
   };
 
   const mapStyle = useMemo(() => ({ height: id ? '50vh' : '100vh'}), [!!id]);
+  const list = arrivals.map(({route = '', minutes = ''}) => {
+    const routeDetails = ((stop || obj).routes || arr).find(r => r.route === route);
+    const descr = [`${minutes || '?'} min`, (routeDetails || obj).line, (routeDetails || obj).title]
+      .filter(Boolean)
+      .join(' | ');
+    console.log(route, (stop || obj).routes, routeDetails);
+    return <li key={descr}>{descr}</li>;
+  });
 
   return (
     <div className={s.App}>
@@ -124,17 +132,7 @@ const App = () => {
       {id &&
         <div className={s.data}>
           <p>{`${(stop || obj).title || ''} (${(stop || obj).str || ''})`}</p>
-          <ul>
-            { arrivals.map(({route = '', minutes = ''}, i) => {
-                const routeDetails = ((stop || obj).routes || arr).find(r => r.route === route);
-                console.log(route, (stop || obj).routes, routeDetails);
-                return <li key={i}>{
-                  [`${minutes || '?'} min`, (routeDetails || obj).line, (routeDetails || obj).title]
-                    .filter(Boolean)
-                    .join(' | ')
-                }</li>;
-            })}
-          </ul>
+          {list.length > 0 && <ul>{list}</ul>}
           <div className={s.button} onClick={refreshHandler}>Refresh</div>
           {updateTimestamp && <p className={s.timestamp}>{`Last updated: ${updateTimestamp}`}</p>}
         </div>
