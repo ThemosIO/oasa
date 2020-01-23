@@ -13,9 +13,10 @@ const App = () => {
   const [apiError, setApiError] = useState(null);
   const [apiRouteError, setApiRouteError] = useState(null);
   const [arrivals, setArrivals] = useState([]);
+  const [routes, setRoutes] = useState([]);
   const [id, setId] = useState(null);
 
-  const stop = useMemo(() => getStoredStop(id), [id]);
+  const stop = useMemo(() => getStoredStop(id), [id, routes.length]);
 
   // const [lineList, setLineList] = useState(getStoredLines() || arr);
   // const [apiLinesError, setApiLinesError] = useState(null);
@@ -82,8 +83,8 @@ const App = () => {
           title: route.RouteDescr || route.LineDescr,
         }));
       if(curatedData.length > 0) {
-        stop.routes = curatedData;
-        updateStoredStops(stop);
+        setRoutes(curatedData);
+        updateStoredStops({ ...stop, routes: curatedData });
       }
     } catch(err) {
       setApiRouteError(((err || obj).response || obj).status || 404);
@@ -122,7 +123,7 @@ const App = () => {
     const descr = [`${minutes || '?'} min`, (routeDetails || obj).line, (routeDetails || obj).title]
       .filter(Boolean)
       .join(' | ');
-    console.log(route, (stop || obj).routes, routeDetails);
+    console.log(route, stop, routeDetails);
     return <li key={descr}>{descr}</li>;
   });
 
