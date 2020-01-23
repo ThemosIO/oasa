@@ -14,10 +14,20 @@ const MapComponent = () => {
   const [zoom, setZoom] = useState(14);
   const [center, setCenter] = useState(null);
   const [prevCoords, setPrevCoords] = useState(null);
+  const [closestStops, setClosestStops] = useState(arr);
 
   const getClosestStops = async ({ lat, lon }) => {
-    const { data } = await axios.get(GET_CLOSEST_STOPS({ lat, lon }));
-    console.log(data);
+    console.warn('GET_CLOSEST_STOPS request fired.');
+    try {
+      const {data} = await axios.get(GET_CLOSEST_STOPS({lat, lon}));
+      const curatedData = (data || arr)
+        .filter(stop => stop.StopLat && stop.StopLng)
+        .map(({StopDescr, StopDescrEng, StopLat, StopLng}) =>
+          ({coords: [StopLat, StopLng], title: StopDescr || StopDescrEng || 'Bus stop'}));
+      curatedData.length > 0 && setClosestStops(curatedData);
+    } catch {
+      console.error('GET_CLOSEST_STOPS request failed.');
+    }
   };
 
   useEffect(() => { // update center if geo changed
@@ -38,7 +48,9 @@ const MapComponent = () => {
     : <div className={s.map}>
         <Map center={center || coords} zoom={zoom} defaultHeight={remToPx(24)} attribution={false}
              twoFingerDrag metaWheelZoom onBoundsChanged={mapHandler}>
-          <Marker anchor={coords} size={45} onClick={clickHandler} />
+          <Marker isUser anchor={coords} size={45} onClick={clickHandler} />
+          {closestStops.map(({ coords, title }) =>
+            <Marker anchor={coords} size={45} text={title} onClick={clickHandler} />)}
         </Map>
       </div>;
 };

@@ -1,8 +1,21 @@
 .marker {
-  position: absolute;
-  z-index: 1;
-  fill: var(--color-primary);
+  fill: blue;
   &, * {
     cursor: pointer;
   }
+  &.user {
+    fill: red;
+  }
+}
+
+.stopTitle {
+  left: -0.25rem;
+  top: -0.25rem;
+  width: 100%;
+  text-align: center;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  color: white;
+  background: blue;
+  position: absolute;
 }
