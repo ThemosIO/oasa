@@ -87,7 +87,7 @@ const App = () => {
         }));
       if(curatedData.length > 0) {
         setRoutes(curatedData);
-        updateStoredStops({ ...stop, routes: curatedData });
+        updateStoredStops([{ ...stop, routes: curatedData }]);
       }
     } catch(err) {
       console.log('>>', err);
@@ -96,9 +96,9 @@ const App = () => {
     }
   };
 
-  const throttledGetArrivals = useCallback(throttle(getArrivals, 5000), []);
+  const throttledGetArrivals = useCallback(throttle(getArrivals, 10000), []);
 
-  const throttledGetRoutes = useCallback(throttle(getRoutes, 5000), []);
+  const throttledGetRoutes = useCallback(throttle(getRoutes, 10000), []);
 
   useEffect(() => { // make api call again if error occurs.
     if(!(stop || obj).code) return;
