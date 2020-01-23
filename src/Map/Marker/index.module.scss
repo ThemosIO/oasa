@@ -1,21 +1,37 @@
-.marker {
-  fill: blue;
-  &, * {
-    cursor: pointer;
-  }
-  &.user {
-    fill: red;
-  }
-}
+$stopBg: blue;
+$stopFg: white;
+$userBg: red;
 
-.stopTitle {
-  left: -0.25rem;
-  top: -0.25rem;
-  width: 100%;
-  text-align: center;
-  border-radius: 0.25rem;
-  padding: 0.25rem;
-  color: white;
-  background: blue;
+.container {
   position: absolute;
+  z-index: 1;
+
+  .marker {
+    fill: $userBg;
+  }
+
+  .stopTitle {
+    &, * { cursor: pointer; }
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 0;
+    text-align: center;
+    white-space: pre;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    color: $stopFg;
+    background: $stopBg;
+    transform: translateX(-50%);
+    &::before {
+      content: '';
+      position: absolute;
+      background: $stopBg;
+      left: calc(50% - 0.5rem);
+      z-index: -1;
+      width: 1rem;
+      height: 1rem;
+      transform: translateY(1rem) rotate(45deg);
+    }
+  }
 }

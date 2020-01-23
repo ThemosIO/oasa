@@ -8,7 +8,10 @@ const useGeo = () => {
   useEffect(() => {
     if((navigator || {}).geolocation) {
       const success = ({ coords: { latitude: lat, longitude: lon } }) => {
-        setCoords([lat, lon]);
+        setCoords([
+          parseFloat(parseFloat(lat).toFixed(5)),
+          parseFloat(parseFloat(lon).toFixed(5)),
+        ]);
         setError(null);
       };
       const error = () => setError(GEO_ERRORS.FAILED);

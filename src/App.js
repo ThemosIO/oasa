@@ -1,15 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Map from './Map';
 import s from './App.module.scss';
 
 const App = () => {
+  const [id, setId] = useState(null);
+  const idCallback = selectedId => setId(selectedId);
   return (
     <div className={s.App}>
-      <Map />
-      <div className={s.AppHeader}>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
+      <Map idCallback={idCallback}/>
+      <div className={s.data}>
+        <p>{id}</p>
       </div>
     </div>
   );
