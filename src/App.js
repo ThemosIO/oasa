@@ -10,6 +10,7 @@ const arr = [];
 
 const App = () => {
   const [id, setId] = useState(null);
+  const [updateTimestamp, setUpdateTimestamp] = useState('');
   const [apiError, setApiError] = useState(null);
   const stop = useMemo(() => getIdEntry(id), [id]);
   const [arrivals, setArrivals] = useState([]);
@@ -28,6 +29,7 @@ const App = () => {
         }));
       if(curatedData.length > 0) {
         setArrivals(curatedData);
+        setUpdateTimestamp(new Date().toLocaleTimeString());
       }
     } catch(err) {
       setApiError(((err || obj).response || obj).status || 404);
@@ -65,6 +67,7 @@ const App = () => {
               <li>{`${vehicle} (${minutes})`}</li>)}
           </ul>
           <div className={s.button} onClick={refreshHandler}>Refresh</div>
+          <p className={s.timestamp}>{updateTimestamp}</p>
         </div>
       }
     </div>
