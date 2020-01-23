@@ -3,6 +3,7 @@ import Map from 'pigeon-maps';
 import throttle from 'lodash/throttle';
 import { remToPx } from '../helpers/remToPx';
 import useGeo from '../helpers/useGeo';
+import { getStorage, updateStorage } from '../helpers/localStorage';
 import { GET_CLOSEST_STOPS } from '../helpers/api';
 import Marker from './Marker';
 import { testData } from '../helpers/testData';
@@ -16,7 +17,7 @@ const MapComponent = ({ idCallback = () => {} }) => {
   const [zoom, setZoom] = useState(16);
   const [center, setCenter] = useState(null);
   const [prevCoords, setPrevCoords] = useState(null);
-  const [closestStops, setClosestStops] = useState(arr);
+  const [closestStops, setClosestStops] = useState(getStorage());
   const [apiError, setApiError] = useState(null);
 
   const getStops = async ({ lat, lon }) => {
@@ -37,7 +38,10 @@ const MapComponent = ({ idCallback = () => {} }) => {
           code: stop.StopCode,
           id: stop.StopID,
         }));
-      curatedData.length > 0 && setClosestStops(curatedData);
+      if(curatedData.length > 0) {
+        setClosestStops(curatedData);
+        updateStorage(curatedData);
+      }
     } catch(err) {
       setApiError(((err || obj).response || obj).status || 404);
       console.error('GET_CLOSEST_STOPS request failed.');
