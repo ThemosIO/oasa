@@ -128,9 +128,11 @@ const App = () => {
           <ul>
             { arrivals.map(({route = '', minutes = ''}, i) => {
                 const routeDetails = ((stop || obj).routes || arr).find(r => r.route === route);
-                console.log(routeDetails);
+                console.log(route, (stop || obj).routes, routeDetails);
                 return <li key={i}>{
-                  [minutes, (routeDetails || obj).line, (routeDetails || obj).title].join(' | ')
+                  [`${minutes || '?'} min`, (routeDetails || obj).line, (routeDetails || obj).title]
+                    .filter(Boolean)
+                    .join(' | ')
                 }</li>;
             })}
           </ul>
