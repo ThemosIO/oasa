@@ -19,7 +19,8 @@ const MapComponent = ({ idCallback = () => {} }) => {
   const [closestStops, setClosestStops] = useState(arr);
   const [apiError, setApiError] = useState(null);
 
-  const getClosestStops = async ({ lat, lon }) => {
+  const getStops = async ({ lat, lon }) => {
+    console.log('getClosestStops()');
     setApiError(null);
     try {
       const { data } = await GET_CLOSEST_STOPS({lat, lon});
@@ -43,23 +44,20 @@ const MapComponent = ({ idCallback = () => {} }) => {
     }
   };
 
+  const throttledGetStops = useCallback(throttle(getStops, 5000), []);
+
   useEffect(() => { // update center if geo changed
     if((prevCoords || arr).join() === (coords || arr).join()) return;
     console.log('coords useEffect');
-    (coords || arr).length === 2 && getClosestStops({ lat: coords[0], lon: coords[1] });
+    (coords || arr).length === 2 && throttledGetStops({ lat: coords[0], lon: coords[1] });
     setPrevCoords(coords);
     setCenter(coords);
   }, [coords, center, prevCoords]);
 
-  const throttledGetClosestStops = useCallback(() =>
-    throttle(getClosestStops, 5000, { trailing: true }),
-  []);
-
   useEffect(() => { // make api call again if error occurs.
     if(!apiError) return;
     console.log('throttled useEffect');
-    (coords || arr).length === 2 && throttledGetClosestStops(getClosestStops, 5000, { trailing: true });
-    return throttledGetClosestStops.cancel;
+    (coords || arr).length === 2 && throttledGetStops({ lat: coords[0], lon: coords[1] });
   }, [apiError]);
 
   const clickHandler = id => () => idCallback(id);
