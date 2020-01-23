@@ -16,7 +16,6 @@ const MapComponent = () => {
   const [closestStops, setClosestStops] = useState(arr);
 
   const getClosestStops = async ({ lat, lon }) => {
-    console.warn('GET_CLOSEST_STOPS request fired.');
     try {
       const { data } = await GET_CLOSEST_STOPS({lat, lon});
       const curatedData = (data || arr)
@@ -42,7 +41,7 @@ const MapComponent = () => {
     setCenter(center);
   };
 
-  console.log(closestStops);
+  console.log(closestStops, coords);
 
   return !prevCoords && (loading || error)
     ? <div>{error ? 'error' : 'loading'}</div>
