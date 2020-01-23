@@ -6,6 +6,7 @@ import c from '../../helpers/classNames';
 import useGeo from '../../helpers/useGeo';
 import { updateAllStoredEntries, updateStoredStops } from '../../helpers/localStorage';
 import { GET_CLOSEST_STOPS } from '../../helpers/api';
+// import { testData } from '../../helpers/testData';
 import Marker from './Marker';
 import s from './index.module.scss';
 
@@ -36,7 +37,6 @@ const MapComponent = ({ idCallback = () => {} }) => {
           title: stop.StopDescr || stop.StopDescrEng || 'Bus Stop',
           str: `${stop.StopHeading} ${stop.StopStreet || stop.StopStreetEng}`,
           code: stop.StopCode,
-          id: stop.StopID || stop.StopCode,
         }));
       if(curatedData.length > 0) {
         setClosestStops(curatedData);
@@ -77,8 +77,8 @@ const MapComponent = ({ idCallback = () => {} }) => {
              twoFingerDrag metaWheelZoom onBoundsChanged={mapHandler}>
           <Marker anchor={coords} size={45} />
           {closestStops.map(stop =>
-            <Marker key={stop.id} anchor={stop.coords} size={45} isStop={stop.title}
-                    onClick={clickHandler(stop.id)} />)}
+            <Marker key={stop.code} anchor={stop.coords} size={45} isStop={stop.title}
+                    onClick={clickHandler(stop.code)} />)}
         </Map>
       </div>;
 };

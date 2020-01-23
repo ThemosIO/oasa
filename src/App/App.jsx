@@ -75,15 +75,13 @@ const App = () => {
     setApiRouteError(null);
     try {
       const { data } = await GET_ROUTES_FOR_STOP(stopCode);
-      console.log('test1', data);
       const curatedData = (data || arr)
-        .filter(route => route.routeCode != null && route.LineID != null)
+        .filter(route => route.RouteCode != null && route.LineID != null)
         .map(route => ({
-          route: route.routeCode,
+          route: route.RouteCode,
           line: route.LineID,
           title: route.RouteDescr || route.LineDescr,
         }));
-      console.log('test2', curatedData);
       if(curatedData.length > 0) {
         setRoutes(curatedData);
         updateStoredStops({ ...stop, routes: curatedData });

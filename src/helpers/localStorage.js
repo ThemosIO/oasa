@@ -6,7 +6,7 @@ const obj = {};
 //   window.localStorage.setItem(LINES_ID, JSON.stringify(data || arr));
 
 export const updateStoredStops = data => (data || arr)
-  .forEach(d => d.id && window.localStorage.setItem(d.id, JSON.stringify(d)));
+  .forEach(d => d.code && window.localStorage.setItem(d.code, JSON.stringify(d)));
 
 
 export const updateAllStoredEntries = () => {
@@ -16,6 +16,6 @@ export const updateAllStoredEntries = () => {
     .map(key => JSON.parse(storage.getItem(key)) || '{}');
 };
 
-export const getStoredStop = id => JSON.parse(window.localStorage.getItem(id) || '{}');
+export const getStoredStop = code => JSON.parse(window.localStorage.getItem(code) || '{}');
 
 export const clearStoredEntries = () => window.localStorage.clear();
