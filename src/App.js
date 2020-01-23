@@ -35,7 +35,7 @@ const App = () => {
     }
   };
 
-  const throttledGetArrivals = useCallback(throttle(getArrivals, 5000), []);
+  const throttledGetArrivals = useCallback(throttle(getArrivals, 15000), []);
 
   useEffect(() => { // make api call again if error occurs.
     if(!apiError) return;
@@ -50,17 +50,23 @@ const App = () => {
   }, [id]);
 
   const idCallback = selectedId => setId(selectedId);
+  const refreshHandler = () => (stop || obj).code && getArrivals(stop.code);
+
+  const mapStyle = useMemo(() => ({ height: id ? '50vh' : '100vh'}), [id]);
 
   return (
     <div className={s.App}>
-      <Map idCallback={idCallback}/>
-      <div className={s.data}>
-        {id && <p>{`${(stop || obj).title || ''} (${(stop || obj).str || ''})`}</p>}
-        <ul>
-          {arrivals.map(({ vehicle = '', minutes = '' }) =>
-            <li>{`${vehicle} (${minutes})`}</li>)}
-        </ul>
-      </div>
+      <Map idCallback={idCallback} style={mapStyle}/>
+      {id &&
+        <div className={s.data}>
+          <p>{`${(stop || obj).title || ''} (${(stop || obj).str || ''})`}</p>
+          <ul>
+            {arrivals.map(({vehicle = '', minutes = ''}) =>
+              <li>{`${vehicle} (${minutes})`}</li>)}
+          </ul>
+          <div className={s.button} onClick={refreshHandler}>Refresh</div>
+        </div>
+      }
     </div>
   );
 };

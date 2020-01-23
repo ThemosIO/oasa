@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import Map from 'pigeon-maps';
 import throttle from 'lodash/throttle';
 import { remToPx } from '../helpers/remToPx';
+import c from '../helpers/classNames';
 import useGeo from '../helpers/useGeo';
 import { getAllEntries, updateEntries } from '../helpers/localStorage';
 import { GET_CLOSEST_STOPS } from '../helpers/api';
@@ -15,6 +16,7 @@ const MapComponent = ({ idCallback = () => {} }) => {
   const [coords, error, loading] = useGeo(); // lat, lon
   const [zoom, setZoom] = useState(16);
   const [center, setCenter] = useState(null);
+  const [id, setId] = useState(null);
   const [prevCoords, setPrevCoords] = useState(null);
   const [closestStops, setClosestStops] = useState(getAllEntries());
   const [apiError, setApiError] = useState(null);
@@ -59,7 +61,10 @@ const MapComponent = ({ idCallback = () => {} }) => {
     (coords || arr).length === 2 && throttledGetStops({ lat: coords[0], lon: coords[1] });
   }, [apiError]);
 
-  const clickHandler = id => () => idCallback(id);
+  const clickHandler = id => () => {
+    idCallback(id);
+    setId(id);
+  };
   const mapHandler = ({ center, zoom }) => {
     setZoom(zoom);
     setCenter(center);
@@ -67,7 +72,7 @@ const MapComponent = ({ idCallback = () => {} }) => {
 
   return !prevCoords && (loading || error)
     ? <div>{error ? 'error' : 'loading'}</div>
-    : <div className={s.map}>
+    : <div className={c(s.map, id && s.withId)}>
         <Map center={center || coords} zoom={zoom} defaultHeight={remToPx(24)} attribution={false}
              twoFingerDrag metaWheelZoom onBoundsChanged={mapHandler}>
           <Marker anchor={coords} size={45} />
