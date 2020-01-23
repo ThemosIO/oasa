@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Map from 'pigeon-maps';
 import { remToPx } from '../helpers/remToPx';
 import useGeo from '../helpers/useGeo';
-import { GET_CLOSEST_STOPS } from '../config';
+import { GET_CLOSEST_STOPS } from '../helpers/api';
 import Marker from './Marker';
 import s from './index.module.scss';
 
@@ -19,7 +18,7 @@ const MapComponent = () => {
   const getClosestStops = async ({ lat, lon }) => {
     console.warn('GET_CLOSEST_STOPS request fired.');
     try {
-      const {data} = await axios.get(GET_CLOSEST_STOPS({lat, lon}));
+      const data = await GET_CLOSEST_STOPS({lat, lon});
       const curatedData = (data || arr)
         .filter(stop => stop.StopLat && stop.StopLng)
         .map(({StopDescr, StopDescrEng, StopLat, StopLng}) =>
