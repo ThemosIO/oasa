@@ -5,3 +5,18 @@
   for = "/*"
     [headers.values]
     Access-Control-Allow-Origin = "*"
+[[redirects]]
+  from = "https://oasa.netlify.com/*"
+  to = "http://oasa.bonsa.io/:splat"
+  status = 301
+  force = true
+[[redirects]]
+  from = "http://oasa.netlify.com/*"
+  to = "http://oasa.bonsa.io/:splat"
+  status = 301
+  force = true
+[[redirects]]
+  from = "https://oasa.bonsa.io/*"
+  to = "http://oasa.bonsa.io/:splat"
+  status = 301
+  force = true
