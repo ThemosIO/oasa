@@ -16,8 +16,3 @@
   to = "http://oasa.bonsa.io"
   status = 301
   force = true
-[[redirects]]
-  from = "https://oasa.bonsa.io"
-  to = "http://oasa.bonsa.io"
-  status = 301
-  force = true
