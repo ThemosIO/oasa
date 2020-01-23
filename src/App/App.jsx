@@ -9,12 +9,13 @@ const obj = {};
 const arr = [];
 
 const App = () => {
-  const [id, setId] = useState(null);
   const [updateTimestamp, setUpdateTimestamp] = useState('');
   const [apiError, setApiError] = useState(null);
   const [apiRouteError, setApiRouteError] = useState(null);
-  const stop = useMemo(() => getStoredStop(id), [id]);
   const [arrivals, setArrivals] = useState([]);
+  const [id, setId] = useState(null);
+
+  const stop = useMemo(() => getStoredStop(id), [id]);
 
   // const [lineList, setLineList] = useState(getStoredLines() || arr);
   // const [apiLinesError, setApiLinesError] = useState(null);
@@ -52,7 +53,6 @@ const App = () => {
     setApiError(null);
     try {
       const { data } = await GET_STOP_ARRIVALS(stopCode);
-      console.log('>>>', data);
       const curatedData = (data || arr)
         .filter(arrival => arrival.route_code != null && arrival.btime2 != null)
         .map(arrival => ({
@@ -74,7 +74,6 @@ const App = () => {
     setApiRouteError(null);
     try {
       const { data } = await GET_ROUTES_FOR_STOP(stopCode);
-      console.log('>>>', data);
       const curatedData = (data || arr)
         .filter(route => route.route_code != null && route.LineID != null)
         .map(route => ({
