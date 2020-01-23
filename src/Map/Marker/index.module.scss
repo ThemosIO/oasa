@@ -1,0 +1,8 @@
+.marker {
+  position: absolute;
+  z-index: 1;
+  fill: var(--color-primary);
+  &, * {
+    cursor: pointer;
+  }
+}
