@@ -8,6 +8,9 @@ import s from './index.module.scss';
 const obj = {};
 const arr = [];
 
+// TODO: reset errors, data etc when id changes
+// getRoutes succeeds but then fails?
+
 const App = () => {
   const [updateTimestamp, setUpdateTimestamp] = useState('');
   const [apiError, setApiError] = useState(null);
@@ -87,6 +90,7 @@ const App = () => {
         updateStoredStops({ ...stop, routes: curatedData });
       }
     } catch(err) {
+      console.log('>>', err);
       setApiRouteError(((err || obj).response || obj).status || 404);
       console.error('GET_ROUTES_FOR_STOP request failed.');
     }
