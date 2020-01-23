@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://telematics.oasa.gr/api',
+  baseURL: 'http://telematics.oasa.gr/api',
   timeout: 15000,
   transformRequest: [data => JSON.stringify(data)],
   mode: 'no-cors',
