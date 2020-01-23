@@ -2,12 +2,9 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: '/api', // proxied through netlify.toml
-  timeout: 5000,
+  timeout: 15000,
   transformRequest: [data => JSON.stringify(data)],
-  mode: 'no-cors',
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-  }
+  headers: { 'Access-Control-Allow-Origin': '*' }
 });
 
 export const GET_CLOSEST_STOPS = ({ lat, lon }) => lat && lon &&
