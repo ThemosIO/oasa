@@ -17,7 +17,7 @@ const MapComponent = ({ idCallback = () => {} }) => {
   const [coords, error, loading] = useGeo(); // lat, lon
   const [zoom, setZoom] = useState(16);
   const [center, setCenter] = useState(null);
-  const [id, setId] = useState(null);
+  const [code, setCode] = useState(null);
   const [prevCoords, setPrevCoords] = useState(null);
   const [closestStops, setClosestStops] = useState(updateAllStoredEntries());
   const [apiError, setApiError] = useState(null);
@@ -61,9 +61,9 @@ const MapComponent = ({ idCallback = () => {} }) => {
     (coords || arr).length === 2 && throttledGetStops({ lat: coords[0], lon: coords[1] });
   }, [apiError]);
 
-  const clickHandler = id => () => {
-    idCallback(id);
-    setId(id);
+  const clickHandler = code => () => {
+    idCallback(code);
+    setCode(code);
   };
   const mapHandler = ({ center, zoom }) => {
     setZoom(zoom);
@@ -72,7 +72,7 @@ const MapComponent = ({ idCallback = () => {} }) => {
 
   return !prevCoords && (loading || error)
     ? <div>{error ? 'error' : 'loading'}</div>
-    : <div className={c(s.map, id && s.withId)}>
+    : <div className={c(s.map, code && s.withCode)}>
         <Map center={center || coords} zoom={zoom} defaultHeight={remToPx(24)} attribution={false}
              twoFingerDrag metaWheelZoom onBoundsChanged={mapHandler}>
           <Marker anchor={coords} size={45} />
