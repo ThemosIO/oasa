@@ -76,11 +76,11 @@ const App = () => {
       const { data } = await GET_ROUTES_FOR_STOP(stopCode);
       console.log('>>>', data);
       const curatedData = (data || arr)
-        .filter(route => route.route_code != null && route.LineCode != null)
+        .filter(route => route.route_code != null && route.LineID != null)
         .map(route => ({
           route: route.route_code,
-          line: route.LineCode,
-          lineTitle: route.LineDescr || route.LineDescrEng,
+          line: route.LineID,
+          title: route.RouteDescr || route.LineDescr,
         }));
       if(curatedData.length > 0) {
         stop.routes = curatedData;
@@ -126,10 +126,12 @@ const App = () => {
         <div className={s.data}>
           <p>{`${(stop || obj).title || ''} (${(stop || obj).str || ''})`}</p>
           <ul>
-            { arrivals.map(({route = '', minutes = ''}) => {
+            { arrivals.map(({route = '', minutes = ''}, i) => {
                 const routeDetails = ((stop || obj).routes || arr).find(r => r.route === route);
                 console.log(routeDetails);
-                return <li>{`${(routeDetails || obj).lineTitle || 'Bus'} (${minutes})`}</li>;
+                return <li key={i}>{
+                  [minutes, (routeDetails || obj).line, (routeDetails || obj).title].join(' | ')
+                }</li>;
             })}
           </ul>
           <div className={s.button} onClick={refreshHandler}>Refresh</div>

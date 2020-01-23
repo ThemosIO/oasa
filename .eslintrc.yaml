@@ -72,4 +72,4 @@ rules:
   react/destructuring-assignment: off
   react/no-danger: off
   react/prop-types: off
-  react-app/exhaustive-deps: off
+  react-hooks/exhaustive-deps: off
