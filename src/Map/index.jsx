@@ -18,7 +18,7 @@ const MapComponent = () => {
   const getClosestStops = async ({ lat, lon }) => {
     console.warn('GET_CLOSEST_STOPS request fired.');
     try {
-      const data = await GET_CLOSEST_STOPS({lat, lon});
+      const { data } = await GET_CLOSEST_STOPS({lat, lon});
       const curatedData = (data || arr)
         .filter(stop => stop.StopLat && stop.StopLng)
         .map(({StopDescr, StopDescrEng, StopLat, StopLng}) =>
@@ -26,7 +26,6 @@ const MapComponent = () => {
       curatedData.length > 0 && setClosestStops(curatedData);
     } catch(err) {
       console.error('GET_CLOSEST_STOPS request failed.');
-      console.error(err);
     }
   };
 
