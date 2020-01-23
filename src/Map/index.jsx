@@ -16,16 +16,7 @@ const MapComponent = () => {
   const [prevCoords, setPrevCoords] = useState(null);
 
   const getClosestStops = async ({ lat, lon }) => {
-    const { data } = await axios.get(
-      GET_CLOSEST_STOPS({ lat, lon }),
-      {
-        crossdomain : true,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          mode: 'no-cors',
-        }
-      });
+    const { data } = await axios.get(GET_CLOSEST_STOPS({ lat, lon }));
     console.log(data);
   };
 
