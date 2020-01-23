@@ -24,8 +24,8 @@ const MapComponent = () => {
         .map(({StopDescr, StopDescrEng, StopLat, StopLng}) =>
           ({coords: [StopLat, StopLng], title: StopDescr || StopDescrEng || 'Bus stop'}));
       curatedData.length > 0 && setClosestStops(curatedData);
-    } catch {
-      console.error('GET_CLOSEST_STOPS request failed.');
+    } catch(err) {
+      console.error('GET_CLOSEST_STOPS request failed.', err);
     }
   };
 
