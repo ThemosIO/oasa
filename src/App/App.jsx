@@ -16,7 +16,7 @@ const App = () => {
   const [routes, setRoutes] = useState([]);
   const [id, setId] = useState(null);
 
-  const stop = useMemo(() => getStoredStop(id), [id, routes.length]);
+  const stop = useMemo(() => ({ ...getStoredStop(id), routes }), [id, routes.length]);
 
   // const [lineList, setLineList] = useState(getStoredLines() || arr);
   // const [apiLinesError, setApiLinesError] = useState(null);
@@ -82,6 +82,7 @@ const App = () => {
           line: route.LineID,
           title: route.RouteDescr || route.LineDescr,
         }));
+      console.log('test', curatedData);
       if(curatedData.length > 0) {
         setRoutes(curatedData);
         updateStoredStops({ ...stop, routes: curatedData });
