@@ -1,13 +1,12 @@
-$stopBg: blue;
-$stopFg: white;
-$userBg: red;
+$bg: #282c34;
+$fg: #fff;
 
 .container {
   position: absolute;
   z-index: 1;
 
   .marker {
-    fill: $userBg;
+    fill: $bg;
   }
 
   .stopTitle {
@@ -20,13 +19,13 @@ $userBg: red;
     white-space: pre;
     border-radius: 0.25rem;
     padding: 0.25rem;
-    color: $stopFg;
-    background: $stopBg;
+    color: $fg;
+    background: $bg;
     transform: translateX(-50%);
     &::before {
       content: '';
       position: absolute;
-      background: $stopBg;
+      background: $bg;
       left: calc(50% - 0.5rem);
       z-index: -1;
       width: 1rem;

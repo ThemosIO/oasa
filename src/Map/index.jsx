@@ -3,10 +3,9 @@ import Map from 'pigeon-maps';
 import throttle from 'lodash/throttle';
 import { remToPx } from '../helpers/remToPx';
 import useGeo from '../helpers/useGeo';
-import { getStorage, updateStorage } from '../helpers/localStorage';
+import { getAllEntries, updateEntries } from '../helpers/localStorage';
 import { GET_CLOSEST_STOPS } from '../helpers/api';
 import Marker from './Marker';
-import { testData } from '../helpers/testData';
 import s from './index.module.scss';
 
 const arr = [];
@@ -17,11 +16,10 @@ const MapComponent = ({ idCallback = () => {} }) => {
   const [zoom, setZoom] = useState(16);
   const [center, setCenter] = useState(null);
   const [prevCoords, setPrevCoords] = useState(null);
-  const [closestStops, setClosestStops] = useState(getStorage());
+  const [closestStops, setClosestStops] = useState(getAllEntries());
   const [apiError, setApiError] = useState(null);
 
   const getStops = async ({ lat, lon }) => {
-    console.log('getClosestStops()');
     setApiError(null);
     try {
       const { data } = await GET_CLOSEST_STOPS({lat, lon});
@@ -36,15 +34,14 @@ const MapComponent = ({ idCallback = () => {} }) => {
           title: stop.StopDescr || stop.StopDescrEng || 'Bus Stop',
           str: `${stop.StopHeading} ${stop.StopStreet || stop.StopStreetEng}`,
           code: stop.StopCode,
-          id: stop.StopID,
+          id: stop.StopID || stop.StopCode,
         }));
       if(curatedData.length > 0) {
         setClosestStops(curatedData);
-        updateStorage(curatedData);
+        updateEntries(curatedData);
       }
     } catch(err) {
       setApiError(((err || obj).response || obj).status || 404);
-      console.error('GET_CLOSEST_STOPS request failed.');
     }
   };
 
@@ -52,7 +49,6 @@ const MapComponent = ({ idCallback = () => {} }) => {
 
   useEffect(() => { // update center if geo changed
     if((prevCoords || arr).join() === (coords || arr).join()) return;
-    console.log('coords useEffect');
     (coords || arr).length === 2 && throttledGetStops({ lat: coords[0], lon: coords[1] });
     setPrevCoords(coords);
     setCenter(coords);
@@ -60,7 +56,6 @@ const MapComponent = ({ idCallback = () => {} }) => {
 
   useEffect(() => { // make api call again if error occurs.
     if(!apiError) return;
-    console.log('throttled useEffect');
     (coords || arr).length === 2 && throttledGetStops({ lat: coords[0], lon: coords[1] });
   }, [apiError]);
 
@@ -69,8 +64,6 @@ const MapComponent = ({ idCallback = () => {} }) => {
     setZoom(zoom);
     setCenter(center);
   };
-
-  console.log(closestStops, coords);
 
   return !prevCoords && (loading || error)
     ? <div>{error ? 'error' : 'loading'}</div>

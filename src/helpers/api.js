@@ -8,3 +8,6 @@ const api = axios.create({
 
 export const GET_CLOSEST_STOPS = ({ lat, lon }) => lat && lon &&
   api.get(`/?act=getClosestStops&p1=${lat}&p2=${lon}`);
+
+export const GET_STOP_ARRIVALS = stopCode => stopCode &&
+  api.get(`/?act=getStopArrivals&p1=${stopCode}`);
