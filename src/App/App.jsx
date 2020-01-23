@@ -127,7 +127,7 @@ const App = () => {
           <p>{`${(stop || obj).title || ''} (${(stop || obj).str || ''})`}</p>
           <ul>
             { arrivals.map(({route = '', minutes = ''}) => {
-                const routeDetails = stop.routes.find(r => r.route === route);
+                const routeDetails = ((stop || obj).routes || arr).find(r => r.route === route);
                 console.log(routeDetails);
                 return <li>{`${(routeDetails || obj).lineTitle || 'Bus'} (${minutes})`}</li>;
             })}
