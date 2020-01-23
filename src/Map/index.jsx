@@ -18,10 +18,9 @@ const MapComponent = () => {
   const getClosestStops = async ({ lat, lon }) => {
     console.warn('GET_CLOSEST_STOPS request fired.');
     try {
-      const res = await GET_CLOSEST_STOPS({lat, lon});
-      console.log(res);
-      const curatedData = (res.data || arr)
-        .filter(stop => stop.StopLat && stop.StopLng)
+      const { data } = await GET_CLOSEST_STOPS({lat, lon});
+      const curatedData = (data || arr)
+        .filter(stop => stop.StopLat != null && stop.StopLng != null) // == used for null/undefined
         .map(({StopDescr, StopDescrEng, StopLat, StopLng}) =>
           ({coords: [StopLat, StopLng], title: StopDescr || StopDescrEng || 'Bus stop'}));
       curatedData.length > 0 && setClosestStops(curatedData);
@@ -43,14 +42,16 @@ const MapComponent = () => {
     setCenter(center);
   };
 
+  console.log(closestStops);
+
   return !prevCoords && (loading || error)
     ? <div>{error ? 'error' : 'loading'}</div>
     : <div className={s.map}>
         <Map center={center || coords} zoom={zoom} defaultHeight={remToPx(24)} attribution={false}
              twoFingerDrag metaWheelZoom onBoundsChanged={mapHandler}>
           <Marker isUser anchor={coords} size={45} onClick={clickHandler} />
-          {closestStops.map(({ coords, title }) =>
-            <Marker anchor={coords} size={45} text={title} onClick={clickHandler} />)}
+          {closestStops.map(stop =>
+            <Marker anchor={stop.coords} size={45} text={stop.title} onClick={clickHandler} />)}
         </Map>
       </div>;
 };
