@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: '/api', // proxied through netlify.toml
-  timeout: 10000,
+  timeout: 15000,
   headers: { 'Access-Control-Allow-Origin': '*' }
 });
 

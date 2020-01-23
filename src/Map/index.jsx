@@ -18,8 +18,9 @@ const MapComponent = () => {
   const getClosestStops = async ({ lat, lon }) => {
     console.warn('GET_CLOSEST_STOPS request fired.');
     try {
-      const { data } = await GET_CLOSEST_STOPS({lat, lon});
-      const curatedData = (data || arr)
+      const res = await GET_CLOSEST_STOPS({lat, lon});
+      console.log(res);
+      const curatedData = (res.data || arr)
         .filter(stop => stop.StopLat && stop.StopLng)
         .map(({StopDescr, StopDescrEng, StopLat, StopLng}) =>
           ({coords: [StopLat, StopLng], title: StopDescr || StopDescrEng || 'Bus stop'}));
