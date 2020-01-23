@@ -7,7 +7,8 @@
     [headers.values]
     Access-Control-Allow-Origin = "*"
 [[redirects]]
-  from = "https://oasa.netlify.com"
-  to = "http://oasa.netlify.com"
-  status = 301
+  from = "/api"
+  to = "https://telematics.oasa.gr/api"
+  status = 200
   force = true
+  headers = {X-From = "Netlify"}
