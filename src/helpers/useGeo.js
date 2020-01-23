@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { GEO_OPTIONS, GEO_ERRORS } from '../config';
+
+const GEO_ERRORS = { UNSUPPORTED: 'unsupported', FAILED: 'failed' };
+const GEO_OPTIONS = { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 };
 
 const useGeo = () => {
   const [coords, setCoords] = useState(null);

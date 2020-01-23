@@ -11,3 +11,8 @@ export const GET_CLOSEST_STOPS = ({ lat, lon }) => lat && lon &&
 
 export const GET_STOP_ARRIVALS = stopCode => stopCode &&
   api.get(`/?act=getStopArrivals&p1=${stopCode}`);
+
+export const GET_ROUTES_FOR_STOP = stopCode => stopCode &&
+  api.get(`/?act=webRoutesForStop&p1=${stopCode}`);
+
+// export const GET_LINES = () => api.get('/?act=webGetLines');

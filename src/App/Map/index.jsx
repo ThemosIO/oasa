@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import Map from 'pigeon-maps';
 import throttle from 'lodash/throttle';
-import { remToPx } from '../helpers/remToPx';
-import c from '../helpers/classNames';
-import useGeo from '../helpers/useGeo';
-import { getAllEntries, updateEntries } from '../helpers/localStorage';
-import { GET_CLOSEST_STOPS } from '../helpers/api';
+import { remToPx } from '../../helpers/remToPx';
+import c from '../../helpers/classNames';
+import useGeo from '../../helpers/useGeo';
+import { updateAllStoredEntries, updateStoredStops } from '../../helpers/localStorage';
+import { GET_CLOSEST_STOPS } from '../../helpers/api';
 import Marker from './Marker';
 import s from './index.module.scss';
 
@@ -18,7 +18,7 @@ const MapComponent = ({ idCallback = () => {} }) => {
   const [center, setCenter] = useState(null);
   const [id, setId] = useState(null);
   const [prevCoords, setPrevCoords] = useState(null);
-  const [closestStops, setClosestStops] = useState(getAllEntries());
+  const [closestStops, setClosestStops] = useState(updateAllStoredEntries());
   const [apiError, setApiError] = useState(null);
 
   const getStops = async ({ lat, lon }) => {
@@ -40,7 +40,7 @@ const MapComponent = ({ idCallback = () => {} }) => {
         }));
       if(curatedData.length > 0) {
         setClosestStops(curatedData);
-        updateEntries(curatedData);
+        updateStoredStops(curatedData);
       }
     } catch(err) {
       setApiError(((err || obj).response || obj).status || 404);

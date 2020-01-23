@@ -1,5 +1,4 @@
-$bg: #282c34;
-$fg: #fff;
+@import '../theme.scss';
 
 .App {
   overflow: hidden;
@@ -17,7 +16,7 @@ $fg: #fff;
       cursor: pointer;
     }
     .timestamp {
-      font-size: 0.5rem;
+      font-size: 0.85rem;
     }
   }
 }

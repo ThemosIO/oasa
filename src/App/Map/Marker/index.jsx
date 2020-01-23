@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import { ReactComponent as LocationSvg } from '../../assets/location.inline.svg';
+import { ReactComponent as LocationSvg } from '../../../assets/location.inline.svg';
 import s from './index.module.scss';
 
 const Marker = ({ size = 32, topFix = 4, left, top, isStop = '', onClick = () => {} }) => {
