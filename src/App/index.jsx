@@ -14,7 +14,6 @@ const arr = [];
 // TODO: Bottom part of screen is topleft: title, right: arrivals, bottomLeft: requests
 
 const Index = () => {
-  const [loadMap, setLoadMap] = useState(false);
   const [updateTimestamp, setUpdateTimestamp] = useState('');
   const [apiArrivalError, setApiArrivalError] = useState(null);
   const [apiRouteError, setApiRouteError] = useState(null);
@@ -48,7 +47,6 @@ const Index = () => {
     getArrivals(stopId);
     getRoutes(stopId);
   };
-  const loadMapHandler = () => setLoadMap(true);
 
   const curatedArrivals = useMemo(() => arrivals.map(({route = '', minutes = ''}) => {
     const foundRoute = (routes || arr).find(r => r.id === route) || obj;
@@ -58,9 +56,7 @@ const Index = () => {
   console.log(updateTimestamp, routes, arrivals);
   return (
     <div className={s.app}>
-      {loadMap
-        ? <Map stopCallback={stopCallback} />
-        : <div className={s.prompt} onClick={loadMapHandler}>Load Map</div>}
+      <Map stopCallback={stopCallback} />
       {stopId &&
         <div className={s.data}>
           <p>{`${stop.title || ''} ${stop.street ? `(${stop.street})` : ''}`}</p>
