@@ -5,7 +5,6 @@ import {
   updateStoredRoutes,
   updateStoredStops,
 } from './localStorage';
-// import data from './stopData';
 
 const obj = {};
 const arr = [];

@@ -59,7 +59,7 @@ const Index = () => {
 
   const curatedArrivals = useMemo(() => arrivals.map(({route = '', minutes = ''}) => {
     const foundRoute = (routes || arr).find(r => r.id === route) || obj;
-    return `${minutes || '?'}min ${foundRoute.line || ''} ${foundRoute.title || ''}`;
+    return [`${minutes || '?'}min`, `${foundRoute.line || ''} ${foundRoute.title || ''}`];
   }), [updateTimestamp, (routes || arr).length, (arrivals || arr).length]);
 
   console.log(updateTimestamp, routes, arrivals);
@@ -69,8 +69,9 @@ const Index = () => {
       {!isFirstRender && <Map stopCallback={stopCallback} />}
       {stopId &&
         <div className={s.data}>
-          <p>{`${stop.title || ''} ${stop.street ? `(${stop.street})` : ''}`}</p>
-          <ul>{curatedArrivals.map(arrival => <li key={arrival}>{arrival}</li>)}</ul>
+          {`${stop.title || ''}`}
+          <p>{`${stop.street ? `(${stop.street})` : ''}`}</p>
+          <ul>{curatedArrivals.map(a => <li key={a.join()}>{a[0]}<p>{a[1]}</p></li>)}</ul>
           <div className={s.button} onClick={refreshHandler}>Refresh</div>
           {updateTimestamp && <p className={s.timestamp}>{`Last updated: ${updateTimestamp}`}</p>}
         </div>
