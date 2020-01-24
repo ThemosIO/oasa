@@ -41,11 +41,13 @@ const Index = () => {
     throttledGetRoutes(stopId);
   }, [stopId]);
 
-  useEffect(() => {
-    window.addEventListener('resize', () => {
-      let vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`); // solving mobile vh issue
-    });
+  const setVh = () => document.documentElement.style.setProperty(
+    '--vh',
+    `${Math.max(document.documentElement.clientHeight, window.innerHeight, 0) * 0.01}px`,
+  );
+  useEffect(() => { // solving mobile vh issue
+    window.addEventListener('resize', setVh);
+    return () => { window.removeEventListener('resize', setVh); };
   }, []);
 
 

@@ -28,6 +28,8 @@
     background: $bg;
     font-size: 1rem;
     color: $fg;
+    overflow-x: hidden;
+    overflow-y: scroll;
     .data {
       display: flex;
       flex-direction: column;
@@ -43,6 +45,7 @@
         width: 100%;
         cursor: pointer;
         text-align: center;
+        padding: 1rem 0;
       }
       .timestamp {
         font-size: 0.85rem;
