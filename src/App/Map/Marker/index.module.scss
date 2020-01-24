@@ -2,34 +2,29 @@
 
 .container {
   position: absolute;
-  z-index: 1;
 
   .marker {
+    position: absolute;
+    width: 2.5rem;
+    transform: translateX(-50%) translateY(-85%);
     fill: $bg;
+    z-index: 0;
+    opacity: 0.5;
   }
 
-  .stopTitle {
+  .stop {
     &, * { cursor: pointer; }
     position: absolute;
-    z-index: 2;
-    left: 50%;
+    transform: translateY(-50%);
+    border: 0.125rem solid $fg;
+    z-index: 1;
+    width: 1.25rem;
+    height: 1.25rem;
     top: 0;
-    text-align: center;
-    white-space: pre;
-    border-radius: 0.25rem;
-    padding: 0.25rem;
+    left: calc(50% - 0.625rem);
+    border-radius: 50%;
     color: $fg;
     background: $bg;
-    transform: translateX(-50%);
-    &::before {
-      content: '';
-      position: absolute;
-      background: $bg;
-      left: calc(50% - 0.5rem);
-      z-index: -1;
-      width: 1rem;
-      height: 1rem;
-      transform: translateY(1rem) rotate(45deg);
-    }
+    opacity: 0.75;
   }
 }

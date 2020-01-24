@@ -11,8 +11,8 @@ const useGeo = () => {
     if((navigator || {}).geolocation) {
       const success = ({ coords: { latitude: lat, longitude: lon } }) => {
         setCoords([
-          parseFloat(parseFloat(lat).toFixed(5)),
-          parseFloat(parseFloat(lon).toFixed(5)),
+          parseFloat(parseFloat(lat).toFixed(4)),
+          parseFloat(parseFloat(lon).toFixed(4)),
         ]);
         setError(null);
       };

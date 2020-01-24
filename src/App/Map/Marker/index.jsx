@@ -1,18 +1,18 @@
 import React, {useMemo} from 'react';
 import { ReactComponent as LocationSvg } from '../../../assets/location.inline.svg';
+import { pxToRem } from '../../../helpers/remToPx';
 import s from './index.module.scss';
 
-const Marker = ({ size = 32, topFix = 4, left, top, isStop = '', onClick = () => {} }) => {
+const Marker = ({ left, top, isStop, onClick = () => {} }) => {
   const style = useMemo(() => ({
-    minWidth: `${size}px`,
-    left: `${left - (size / 2)}px`,
-    top: `${top - (size - topFix)}px`,
-  }), [size, left, top, topFix]);
+    left: `${pxToRem(left)}rem`,
+    top: `${pxToRem(top)}rem`,
+  }), [left, top]);
 
   return (
     <div style={style} className={s.container} onClick={onClick}>
       {isStop
-        ? <div className={s.stopTitle}>{isStop}</div>
+        ? <div className={s.stop} />
         : <LocationSvg className={s.marker} />}
     </div>
   );
