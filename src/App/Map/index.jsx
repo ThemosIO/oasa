@@ -34,7 +34,7 @@ const MapComponent = ({ stopCallback = func }) => {
   const mapHandler = ({ center }) => { setCenter(center); };
 
   return (loading || error)
-    ? <div>{error ? 'error' : 'loading'}</div>
+    ? <div className={s.prompt}>{error ? 'error' : 'loading'}</div>
     : <div className={s.map}>
         <Map defaultCenter={coords} defaultZoom={16} defaultHeight={remToPx(24)}
              attribution={false} onBoundsChanged={mapHandler} onClick={mapClickHandler}>

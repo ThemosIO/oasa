@@ -1,9 +1,19 @@
 @import '../theme.scss';
 
-.App {
+.app {
   overflow: hidden;
   background: $bg;
+  color: $fg;
   height: 100vh;
+  .prompt {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
   .data {
     position: fixed;
     z-index: 100;
@@ -15,7 +25,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: calc(10px + 2vmin);
+    font-size: 1.25rem;
     color: $fg;
     .button {
       margin-top: auto;
