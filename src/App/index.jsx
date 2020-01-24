@@ -8,18 +8,18 @@ import s from './index.module.scss';
 const obj = {};
 const arr = [];
 
-// TODO: some routes don't appear check stop response
 // TODO: create clock component that countdowns to refresh requests
+// TODO: bus route stops as a line
 // TODO: Bottom part of screen is topleft: title, right: arrivals, bottomLeft: requests
 
 const Index = () => {
-  const [isFirstRender, setIsFirstRender] = useState(true);
   const [updateTimestamp, setUpdateTimestamp] = useState('');
   const [apiArrivalError, setApiArrivalError] = useState(null);
   const [apiRouteError, setApiRouteError] = useState(null);
   const [arrivals, setArrivals] = useState([]);
   const [routes, setRoutes] = useState(getStoredRoutes());
   const [stopId, setStopId] = useState(null);
+  const [loadMap, setLoadMap] = useState(false);
   const stop = useMemo(() => getStoredStop(stopId), [stopId]);
 
   const getRoutes = id => GET_ROUTES(id, setRoutes, setApiRouteError);
@@ -63,16 +63,19 @@ const Index = () => {
     getRoutes(stopId);
   };
 
+  const loadMapHandler = () => setLoadMap(true);
+
   const curatedArrivals = useMemo(() => arrivals.map(({route = '', minutes = ''}) => {
     const foundRoute = (routes || arr).find(r => r.id === route) || obj;
     return [`${minutes || '?'}min`, `${foundRoute.line || ''} ${foundRoute.title || ''}`];
   }), [updateTimestamp, (routes || arr).length, (arrivals || arr).length]);
 
   console.log(updateTimestamp, routes, arrivals);
-  console.log(`${isFirstRender}`);
   return (
     <div className={s.app}>
-      <Map stopCallback={stopCallback} />
+      {loadMap
+        ? <Map stopCallback={stopCallback} />
+        : <div className={s.prompt} onClick={loadMapHandler}>Load map</div>}
       {stopId &&
         <div className={s.dataContainer}>
           <div className={s.data}>
