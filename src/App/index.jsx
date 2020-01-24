@@ -1,5 +1,5 @@
 import throttle from 'lodash/throttle';
-import React, { useCallback, useEffect, useMemo, useState, lazy, Suspense } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Map from './Map';
 import { getStoredStop, getStoredRoutes } from '../helpers/localStorage';
 import { GET_ROUTES, GET_ARRIVALS } from '../helpers/api';
@@ -14,6 +14,7 @@ const arr = [];
 // TODO: Bottom part of screen is topleft: title, right: arrivals, bottomLeft: requests
 
 const Index = () => {
+  const [isFirstRender, setIsFirstRender] = useState(true);
   const [updateTimestamp, setUpdateTimestamp] = useState('');
   const [apiArrivalError, setApiArrivalError] = useState(null);
   const [apiRouteError, setApiRouteError] = useState(null);
@@ -21,7 +22,6 @@ const Index = () => {
   const [routes, setRoutes] = useState(getStoredRoutes());
   const [stopId, setStopId] = useState(null);
   const stop = useMemo(() => getStoredStop(stopId), [stopId]);
-  const LazyMap = lazy(() => import('./Map'));
 
   const getRoutes = id => GET_ROUTES(id, setRoutes, setApiRouteError);
   const throttledGetRoutes = useCallback(throttle(getRoutes, 10000), []);
@@ -41,6 +41,8 @@ const Index = () => {
     throttledGetArrivals(stopId);
     throttledGetRoutes(stopId);
   }, [stopId]);
+
+  useEffect(() => { setIsFirstRender(false); }, []);
 
   const stopCallback = stopId => { // when stop id changes, reset
     setUpdateTimestamp('');
@@ -62,11 +64,10 @@ const Index = () => {
   }), [updateTimestamp, (routes || arr).length, (arrivals || arr).length]);
 
   console.log(updateTimestamp, routes, arrivals);
+  console.log(`${isFirstRender}`);
   return (
     <div className={s.app}>
-      <Suspense fallback={<div>Loading...</div>}>
-        <LazyMap stopCallback={stopCallback} />
-      </Suspense>
+      {!isFirstRender && <Map stopCallback={stopCallback} />}
       {stopId &&
         <div className={s.data}>
           <p>{`${stop.title || ''} ${stop.street ? `(${stop.street})` : ''}`}</p>
