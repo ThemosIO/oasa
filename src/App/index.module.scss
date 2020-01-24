@@ -14,31 +14,36 @@
     justify-content: center;
     cursor: pointer;
   }
-  .data {
+  .dataContainer {
+    text-transform: lowercase;
     position: fixed;
     z-index: 100;
+    top: 50%;
     bottom: 0;
     left: 0;
-    height: 50%;
-    width: 100%;
+    right: 0;
     background: $bg;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     font-size: 1rem;
     color: $fg;
-    p {
-      font-size: 0.85rem;
-      opacity: 0.9;
-    }
-    .button {
-      margin-top: auto;
+    .data {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       width: 100%;
-      cursor: pointer;
-      text-align: center;
-    }
-    .timestamp {
-      font-size: 0.85rem;
+      height: 100%;
+      p {
+        font-size: 0.85rem;
+        opacity: 0.9;
+      }
+      .button {
+        margin-top: auto;
+        width: 100%;
+        cursor: pointer;
+        text-align: center;
+      }
+      .timestamp {
+        font-size: 0.85rem;
+      }
     }
   }
 }
