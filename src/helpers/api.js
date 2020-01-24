@@ -42,10 +42,10 @@ export const GET_STOPS = async (
           parseFloat(parseFloat(stop.StopLat).toFixed(5)),
           parseFloat(parseFloat(stop.StopLng).toFixed(5)),
         ],
-        title: stop.StopDescr || stop.StopDescrEng || '',
-        str: (parseInt(stop.StopHeading, 10) > 0 ? `${stop.StopHeading} ` : '')
-          + (stop.StopStreet || stop.StopStreetEng || ''),
         id: stop.StopCode,
+        title: stop.StopDescr || stop.StopDescrEng || '',
+        street: (parseInt(stop.StopHeading, 10) > 0 ? `${stop.StopHeading} ` : '')
+          + (stop.StopStreet || stop.StopStreetEng || ''),
       }));
     if(curatedData.length > 0) {
       updateStoredStops(curatedData);
@@ -95,8 +95,8 @@ export const GET_ROUTES = async (
       .filter(route => route.RouteCode != null && route.LineID != null)
       .map(route => ({
         id: route.RouteCode,
-        line: route.LineID,
         title: route.RouteDescr || route.LineDescr,
+        line: route.LineID,
       }));
     if(curatedData.length > 0) {
       updateStoredRoutes(curatedData);
