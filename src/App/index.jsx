@@ -55,7 +55,7 @@ const Index = () => {
     return `${minutes || '?'}min ${foundRoute.line || ''} ${foundRoute.title || ''}`;
   }), [updateTimestamp, (routes || arr).length, (arrivals || arr).length]);
 
-  console.log(curatedArrivals);
+  console.log(updateTimestamp, routes, arrivals);
   return (
     <div className={s.app}>
       {loadMap
