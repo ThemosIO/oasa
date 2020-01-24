@@ -1,5 +1,5 @@
 import throttle from 'lodash/throttle';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import Map from './Map';
 import { getStoredStop, getStoredRoutes } from '../helpers/localStorage';
 import { GET_ROUTES, GET_ARRIVALS } from '../helpers/api';
@@ -21,6 +21,7 @@ const Index = () => {
   const [routes, setRoutes] = useState(getStoredRoutes());
   const [stopId, setStopId] = useState(null);
   const stop = useMemo(() => getStoredStop(stopId), [stopId]);
+  const LazyMap = lazy(() => import('./Map'));
 
   const getRoutes = id => GET_ROUTES(id, setRoutes, setApiRouteError);
   const throttledGetRoutes = useCallback(throttle(getRoutes, 10000), []);
@@ -63,7 +64,9 @@ const Index = () => {
   console.log(updateTimestamp, routes, arrivals);
   return (
     <div className={s.app}>
-      <Map stopCallback={stopCallback} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <LazyMap stopCallback={stopCallback} />
+      </Suspense>
       {stopId &&
         <div className={s.data}>
           <p>{`${stop.title || ''} ${stop.street ? `(${stop.street})` : ''}`}</p>
