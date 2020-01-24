@@ -34,6 +34,13 @@ const Index = () => {
     apiRouteError && throttledGetRoutes(stopId);
   }, [apiArrivalError, apiRouteError, stopId]);
 
+  useEffect(() => { // make api call on new stopId
+    if(!stopId) return;
+    console.log('throttled useEffect (new id)');
+    throttledGetArrivals(stopId);
+    throttledGetRoutes(stopId);
+  }, [stopId]);
+
   const stopCallback = stopId => { // when stop id changes, reset
     setUpdateTimestamp('');
     setApiArrivalError(null);
