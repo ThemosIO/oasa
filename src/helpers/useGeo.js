@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const GEO_ERRORS = { UNSUPPORTED: 'unsupported', FAILED: 'failed' };
+const GEO_OPTIONS = { enableHighAccuracy: false, timeout: 10000, maximumAge: 0 };
 
 const useGeo = () => {
   const [coords, setCoords] = useState(null);
@@ -17,7 +18,7 @@ const useGeo = () => {
       };
       const error = () => setError(GEO_ERRORS.FAILED);
       navigator.geolocation.watchPosition(success, error);
-      const watch = navigator.geolocation.watchPosition(success, error);
+      const watch = navigator.geolocation.watchPosition(success, error, GEO_OPTIONS);
       return () => navigator.geolocation.clearWatch(watch);
     } else {
       setError(GEO_ERRORS.UNSUPPORTED);
