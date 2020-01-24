@@ -4,7 +4,12 @@
   overflow: hidden;
   background: $bg;
   color: $fg;
+  //noinspection CssOverwrittenProperties
   height: 100vh;
+  //noinspection CssOverwrittenProperties
+  height: calc(var(--vh, 1vh) * 100);
+  //noinspection CssInvalidPropertyValue
+  height: -webkit-fill-available;
   .prompt {
     height: 100%;
     width: 100%;
