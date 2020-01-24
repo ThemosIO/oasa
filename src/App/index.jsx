@@ -42,10 +42,12 @@ const Index = () => {
   }, [stopId]);
 
   useEffect(() => {
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`); // solving mobile vh issue
-    setIsFirstRender(false);
+    window.addEventListener('resize', () => {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`); // solving mobile vh issue
+    });
   }, []);
+
 
   const stopCallback = stopId => { // when stop id changes, reset
     setUpdateTimestamp('');
@@ -70,7 +72,7 @@ const Index = () => {
   console.log(`${isFirstRender}`);
   return (
     <div className={s.app}>
-      {!isFirstRender && <Map stopCallback={stopCallback} />}
+      <Map stopCallback={stopCallback} />
       {stopId &&
         <div className={s.dataContainer}>
           <div className={s.data}>
