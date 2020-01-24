@@ -8,7 +8,6 @@ import s from './index.module.scss';
 const obj = {};
 const arr = [];
 
-// TODO: reset errors, data etc when id changes
 // TODO: some routes don't appear check stop response
 // TODO: create clock component that countdowns to refresh requests
 // TODO: Bottom part of screen is topleft: title, right: arrivals, bottomLeft: requests
@@ -24,9 +23,9 @@ const Index = () => {
   const stop = useMemo(() => getStoredStop(stopId), [stopId]);
 
   const getRoutes = id => GET_ROUTES(id, setRoutes, setApiRouteError);
-  const throttledGetRoutes = useCallback(throttle(getRoutes, 10000), []);
+  const throttledGetRoutes = useCallback(throttle(getRoutes, 5000), []);
   const getArrivals = id => GET_ARRIVALS(id, setArrivals, setApiArrivalError, setUpdateTimestamp);
-  const throttledGetArrivals = useCallback(throttle(getArrivals, 10000), []);
+  const throttledGetArrivals = useCallback(throttle(getArrivals, 5000), []);
 
   useEffect(() => { // make api call again if error occurs.
     if(!stopId) return;

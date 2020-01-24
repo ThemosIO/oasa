@@ -13,7 +13,7 @@ const func = () => {};
 
 const api = axios.create({
   baseURL: '/api', // proxied through netlify.toml
-  timeout: 5000,
+  timeout: 4000,
   headers: { 'Access-Control-Allow-Origin': '*' },
 });
 
