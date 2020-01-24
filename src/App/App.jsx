@@ -9,7 +9,9 @@ const obj = {};
 const arr = [];
 
 // TODO: reset errors, data etc when id changes
-// getRoutes succeeds but then fails?
+// TODO: some routes don't appear check stop response
+// TODO: create clock component that countdowns to refresh requests
+// TODO: Bottom part of screen is topleft: title, right: arrivals, bottomLeft: requests
 
 const App = () => {
   const [updateTimestamp, setUpdateTimestamp] = useState('');
@@ -17,9 +19,9 @@ const App = () => {
   const [apiRouteError, setApiRouteError] = useState(null);
   const [arrivals, setArrivals] = useState([]);
   const [routes, setRoutes] = useState([]);
-  const [id, setId] = useState(null);
+  const [code, setCode] = useState(null);
 
-  const stop = useMemo(() => ({ ...getStoredStop(id), routes }), [id, routes.length]);
+  const stop = useMemo(() => ({ ...getStoredStop(code), routes }), [code, routes.length]);
 
   // const [lineList, setLineList] = useState(getStoredLines() || arr);
   // const [apiLinesError, setApiLinesError] = useState(null);
@@ -90,7 +92,6 @@ const App = () => {
         updateStoredStops([{ ...stop, routes: curatedData }]);
       }
     } catch(err) {
-      console.log('>>', err);
       setApiRouteError(((err || obj).response || obj).status || 404);
       console.error('GET_ROUTES_FOR_STOP request failed.');
     }
@@ -108,20 +109,20 @@ const App = () => {
   }, [apiError, apiRouteError]);
 
   useEffect(() => { // make api call again if id changes.
-    if(!id || !(stop || obj).code) return;
+    if(!code || !(stop || obj).code) return;
     console.log('throttled useEffect for id');
     throttledGetArrivals(stop.code);
     throttledGetRoutes(stop.code);
-  }, [id]);
+  }, [code]);
 
-  const idCallback = selectedId => setId(selectedId);
+  const codeCallback = selectedCode => setCode(selectedCode);
   const refreshHandler = () => {
     if(!(stop || obj).code) return;
     getArrivals(stop.code);
     getRoutes(stop.code);
   };
 
-  const mapStyle = useMemo(() => ({ height: id ? '50vh' : '100vh'}), [!!id]);
+  const mapStyle = useMemo(() => ({ height: code ? '50vh' : '100vh'}), [!!code]);
   const list = arrivals.map(({route = '', minutes = ''}) => {
     const routeDetails = ((stop || obj).routes || arr).find(r => r.route === route);
     const descr = [`${minutes || '?'} min`, (routeDetails || obj).line, (routeDetails || obj).title]
@@ -133,8 +134,8 @@ const App = () => {
 
   return (
     <div className={s.App}>
-      <Map idCallback={idCallback} style={mapStyle}/>
-      {id &&
+      <Map codeCallback={codeCallback} style={mapStyle}/>
+      {code &&
         <div className={s.data}>
           <p>{`${(stop || obj).title || ''} (${(stop || obj).str || ''})`}</p>
           {list.length > 0 && <ul>{list}</ul>}

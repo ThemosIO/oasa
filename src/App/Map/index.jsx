@@ -13,7 +13,11 @@ import s from './index.module.scss';
 const arr = [];
 const obj = {};
 
-const MapComponent = ({ idCallback = () => {} }) => {
+// TODO: AG ANASTASI MOVES ALONG W SCREEN
+// TODO: MOVING SCREEN DOESNT SEARCH FOR OTHER STOPS
+// TODO: CURATE STREET (NUMBERS MUST BE >0)
+
+const MapComponent = ({ codeCallback = () => {} }) => {
   const [coords, error, loading] = useGeo(); // lat, lon
   const [zoom, setZoom] = useState(16);
   const [center, setCenter] = useState(null);
@@ -62,7 +66,7 @@ const MapComponent = ({ idCallback = () => {} }) => {
   }, [apiError]);
 
   const clickHandler = code => () => {
-    idCallback(code);
+    codeCallback(code);
     setCode(code);
   };
   const mapHandler = ({ center, zoom }) => {
@@ -76,8 +80,8 @@ const MapComponent = ({ idCallback = () => {} }) => {
         <Map center={center || coords} zoom={zoom} defaultHeight={remToPx(24)} attribution={false}
              twoFingerDrag metaWheelZoom onBoundsChanged={mapHandler}>
           <Marker anchor={coords} size={45} />
-          {closestStops.map(stop =>
-            <Marker key={stop.code} anchor={stop.coords} size={45} isStop={stop.title}
+          {closestStops.map((stop, i) =>
+            <Marker key={stop.code + i} anchor={stop.coords} size={45} isStop={stop.title}
                     onClick={clickHandler(stop.code)} />)}
         </Map>
       </div>;
