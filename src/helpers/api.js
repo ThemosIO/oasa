@@ -4,6 +4,7 @@ import { getStoredRoutes, updateStoredRoutes } from './localStorage';
 const obj = {};
 const arr = [];
 const func = () => {};
+
 const CancelToken = axios.CancelToken;
 const source = CancelToken.source();
 
