@@ -34,7 +34,7 @@ const Index = () => {
 
   const refreshHandler = () => {
     console.log('REFRESH!');
-    setRefreshOn(new Date.now());
+    setRefreshOn(new Date());
   };
 
   const refreshLoop = () => setInterval(refreshHandler, refreshSec * 1000);
