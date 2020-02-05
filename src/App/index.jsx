@@ -55,7 +55,7 @@ const Index = () => {
 
   const curatedArrivals = useMemo(() => arrivals.map(({route = '', minutes = ''}) => {
     const foundRoute = (routes || arr).find(r => r.id === route) || obj;
-    const date = updatedOn instanceof Date && new Date(updatedOn.now() + (+minutes * 60000));
+    const date = updatedOn instanceof Date && new Date(updatedOn.getTime() + (+minutes * 60000));
     return { minutes, date, title: foundRoute.title || '', line: foundRoute.line || ''};
   }), [timeStr(updatedOn), (routes || arr).length, (arrivals || arr).length]);
 
