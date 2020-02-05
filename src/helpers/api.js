@@ -35,7 +35,7 @@ export const GET_ARRIVALS = async (
         minutes: arrival.btime2,
       }));
     if(curatedData.length > 0) {
-      timestampCallback(new Date());
+      timestampCallback(Date.now());
       successCallback(curatedData);
       source.cancel(); // cancel all requests with same token
       source = axios.CancelToken.source(); // new cancel token
