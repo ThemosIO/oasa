@@ -1,6 +1,5 @@
 import axios from 'axios';
 import throttle from 'lodash/throttle';
-import Countdown from 'react-countdown';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getStoredRoutes } from '../helpers/localStorage';
 import { GET_ROUTES, GET_ARRIVALS } from '../helpers/api';
@@ -68,10 +67,7 @@ const Index = () => {
         {`${stop.title}${updatedOn ? ` (updated ${updatedOn.toLocaleTimeString()})` : ''}`}
       </div>
       <ul>{curatedArrivals.map((a, i) =>
-        <li key={i}>
-          <Countdown date={a.date} />
-          {`${a.minutes}min (${a.line})`}
-        </li>)}
+        <li key={i}>{`${a.minutes}min (${a.line})`}</li>)}
       </ul>
     </div>
   );
