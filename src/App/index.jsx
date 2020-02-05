@@ -19,11 +19,11 @@ const Index = () => {
   const [routes, setRoutes] = useState(getStoredRoutes());
   const timeStr = date => date instanceof Date && date.getTime();
 
-  const getRoutes = id => GET_ROUTES({ stopCode: id, successCallback: setRoutes });
+  const getRoutes = stopCode => GET_ROUTES({ stopCode, successCallback: setRoutes });
   const throttledGetRoutes = useCallback(throttle(getRoutes, 10000), []);
-  const getArrivals = id => GET_ARRIVALS({
-    cancelSource: getArrivalsToken,
-    stopCode: id,
+  const getArrivals = ({ stopCode, cancelSource }) => GET_ARRIVALS({
+    cancelSource,
+    stopCode,
     successCallback: setArrivals,
     errorCallback: setApiArrivalError,
     timestampCallback: setUpdatedOn,
@@ -35,7 +35,7 @@ const Index = () => {
     console.log('GONNA REFRESH?', apiArrivalError, !updatedOn, refreshOn);
     if(apiArrivalError || !updatedOn || refreshOn){
       console.log('GONNA REFRESH!');
-      throttledGetArrivals(stop.id);
+      throttledGetArrivals({ stopCode: stop.id, cancelSource: getArrivalsToken });
     }
     setRefreshOn(null);
   }, [timeStr(refreshOn), apiArrivalError, updatedOn]);
