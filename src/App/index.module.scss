@@ -1,56 +1,28 @@
 @import '../theme.scss';
 
 .app {
-  overflow: hidden;
   background: $bg;
   color: $fg;
-  //noinspection CssOverwrittenProperties
-  height: 100vh;
-  //noinspection CssOverwrittenProperties
-  height: calc(var(--vh, 1vh) * 100);
-  .prompt {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  p {
+    font-size: 0.85rem;
+    opacity: 0.9;
   }
-  .dataContainer {
-    text-transform: lowercase;
-    position: fixed;
-    z-index: 100;
-    top: 50%;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: $bg;
-    font-size: 1rem;
-    color: $fg;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    .data {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      min-height: 100%;
-      p {
-        font-size: 0.85rem;
-        opacity: 0.9;
-      }
-      .button {
-        margin-top: auto;
-        width: 100%;
-        cursor: pointer;
-        text-align: center;
-        padding: 1rem 0;
-      }
-      .timestamp {
-        font-size: 0.85rem;
-      }
-    }
+  .button {
+    margin-top: auto;
+    width: 100%;
+    cursor: pointer;
+    text-align: center;
+    padding: 1rem 0;
+  }
+  .timestamp {
+    font-size: 0.85rem;
   }
 }
 

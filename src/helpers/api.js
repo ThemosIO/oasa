@@ -1,10 +1,5 @@
 import axios from 'axios';
-import {
-  getStoredRoutes,
-  getStoredStops,
-  updateStoredRoutes,
-  updateStoredStops,
-} from './localStorage';
+import { getStoredRoutes, updateStoredRoutes } from './localStorage';
 
 const obj = {};
 const arr = [];
@@ -16,44 +11,11 @@ const api = axios.create({
   headers: { 'Access-Control-Allow-Origin': '*' },
 });
 
-const API_GET_CLOSEST_STOPS = (coords = arr) => coords.length === 2 && // lat lon
-  api.get(`/?act=getClosestStops&p1=${coords[0]}&p2=${coords[1]}`);
-
 const API_GET_STOP_ARRIVALS = stopCode => stopCode &&
   api.get(`/?act=getStopArrivals&p1=${stopCode}`);
 
 const API_GET_ROUTES_FOR_STOP = stopCode => stopCode &&
   api.get(`/?act=webRoutesForStop&p1=${stopCode}`);
-
-export const GET_STOPS = async (
-  coords = arr, // lat lon
-  successCallback = func,
-  errorCallback = func,
-) => {
-  if(coords.length !== 2) return;
-  errorCallback(null);
-  try {
-    const { data } = await API_GET_CLOSEST_STOPS(coords);
-    const curatedData = (data || arr)
-      .filter(stop => stop.StopLat != null && stop.StopLng != null) // == used for null/undefined
-      .map(stop => ({
-        coords: [
-          parseFloat(parseFloat(stop.StopLat).toFixed(5)),
-          parseFloat(parseFloat(stop.StopLng).toFixed(5)),
-        ],
-        id: stop.StopCode,
-        title: stop.StopDescr || stop.StopDescrEng || '',
-        street: (parseInt(stop.StopHeading, 10) > 0 ? `${stop.StopHeading} ` : '')
-          + (stop.StopStreet || stop.StopStreetEng || ''),
-      }));
-    if(curatedData.length > 0) {
-      updateStoredStops(curatedData);
-      successCallback(getStoredStops());
-    }
-  } catch(err) {
-    errorCallback(((err || obj).response || obj).status || 404);
-  }
-};
 
 export const GET_ARRIVALS = async (
   stopCode,

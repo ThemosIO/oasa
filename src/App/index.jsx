@@ -39,14 +39,12 @@ const Index = () => {
   console.log(updateTimestamp, routes, arrivals);
   return (
     <div className={s.app}>
-      <div className={s.dataContainer}>
-        <div className={s.data}>
-          {`${stop.title} (${stop.id})`}
-          <ul>{curatedArrivals.map(a => <li key={a.join()}>{a[0]}<p>{a[1]}</p></li>)}</ul>
-          <div className={s.button} onClick={refreshHandler}>Refresh</div>
-          {updateTimestamp && <p className={s.timestamp}>{`Last updated: ${updateTimestamp}`}</p>}
-        </div>
-      </div>
+      <div className={s.button} onClick={refreshHandler}>Refresh</div>
+      <p>{`${stop.title} (${stop.id})`}</p>
+      <ul>{curatedArrivals.map(a =>
+        <li key={a.join()}>{a[0]}<p>{a[1]}</p></li>)}
+      </ul>
+      {updateTimestamp && <p className={s.timestamp}>{`Last updated: ${updateTimestamp}`}</p>}
     </div>
   );
 };
