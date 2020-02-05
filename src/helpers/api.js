@@ -38,8 +38,8 @@ export const GET_ARRIVALS = async (
     if(curatedData.length > 0) {
       timestampCallback(new Date());
       successCallback(curatedData);
+      source.cancel();
     }
-    source.cancel();
   } catch(err) {
     if(axios.isCancel(err)){
       console.error('>> GET_STOP_ARRIVALS request cancelled.');
