@@ -32,8 +32,7 @@ const Index = () => {
 
   const curatedArrivals = useMemo(() => arrivals.map(({route = '', minutes = ''}) => {
     const foundRoute = (routes || arr).find(r => r.id === route) || obj;
-    const date = updatedOn instanceof Date
-      && new Date(updatedOn + minutes * 60000).getTime().toLocaleTimeString();
+    const date = updatedOn instanceof Date && new Date(updatedOn + minutes * 60000).getTime();
     return { minutes, date, title: foundRoute.title || '', line: foundRoute.line || ''};
   }), [
     updatedOn instanceof Date && updatedOn.toLocaleTimeString(),
@@ -42,6 +41,7 @@ const Index = () => {
   ]);
 
   console.log(updatedOn, routes, arrivals);
+
   return (
     <div className={s.app}>
       <div className={s.button} onClick={refreshHandler}>Refresh</div>
