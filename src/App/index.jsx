@@ -40,18 +40,16 @@ const Index = () => {
     (arrivals || arr).length,
   ]);
 
-  console.log(updatedOn, routes, arrivals);
+  console.log(updatedOn, routes, arrivals, curatedArrivals);
 
   return (
-    <div className={s.app}>
-      <div className={s.button} onClick={refreshHandler}>Refresh</div>
-      <p>{stop.title}</p>
+    <div className={s.app} onClick={refreshHandler}>
+      <div>
+        {`${stop.title}${updatedOn ? ` (updated ${updatedOn.toLocaleTimeString()})` : ''}`}
+      </div>
       <ul>{curatedArrivals.map((a, i) =>
         <li key={i}>{`${a.line}: ${a.minutes}min`}</li>)}
       </ul>
-      <p className={s.timestamp}>
-        {updatedOn ? `Last updated: ${updatedOn.toLocaleTimeString()}` : ''}
-      </p>
     </div>
   );
 };
