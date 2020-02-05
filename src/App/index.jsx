@@ -27,7 +27,10 @@ const Index = () => {
     if(apiArrivalError || apiArrivalError === null || timeStr(refreshOn)){
       throttledGetArrivals(stop.id);
     }
-    if(apiRouteError || apiRouteError === null || timeStr(refreshOn)){
+    if((routes || arr).length === 0
+      || apiRouteError
+      || apiRouteError === null
+      || timeStr(refreshOn)){
       throttledGetRoutes(stop.id);
     }
     setRefreshOn(null);
