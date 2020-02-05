@@ -13,28 +13,22 @@ const Index = () => {
   const [refreshOn, setRefreshOn] = useState(null);
   const [updatedOn, setUpdatedOn] = useState(null);
   const [apiArrivalError, setApiArrivalError] = useState(null);
-  const [apiRouteError, setApiRouteError] = useState(null);
   const [arrivals, setArrivals] = useState([]);
   const [routes, setRoutes] = useState(getStoredRoutes());
   const timeStr = date => date instanceof Date && date.toLocaleTimeString();
 
-  const getRoutes = id => GET_ROUTES(id, setRoutes, setApiRouteError);
+  const getRoutes = id => GET_ROUTES(id, setRoutes);
   const throttledGetRoutes = useCallback(throttle(getRoutes, 10000), []);
   const getArrivals = id => GET_ARRIVALS(id, setArrivals, setApiArrivalError, setUpdatedOn);
   const throttledGetArrivals = useCallback(throttle(getArrivals, 10000), []);
 
   useEffect(() => { // make api calls (repeat if error occurs).
+    (routes || arr).length === 0 && throttledGetRoutes(stop.id);
     if(apiArrivalError || apiArrivalError === null || timeStr(refreshOn)){
       throttledGetArrivals(stop.id);
     }
-    if((routes || arr).length === 0
-      || apiRouteError
-      || apiRouteError === null
-      || timeStr(refreshOn)){
-      throttledGetRoutes(stop.id);
-    }
     setRefreshOn(null);
-  }, [timeStr(refreshOn), apiArrivalError, apiRouteError]);
+  }, [timeStr(refreshOn), apiArrivalError]);
 
   const refreshHandler = () => {
     console.log('REFRESH!');
