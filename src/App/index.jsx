@@ -21,7 +21,7 @@ const Index = () => {
   const getRoutes = id => GET_ROUTES(id, setRoutes, setApiRouteError);
   const throttledGetRoutes = useCallback(throttle(getRoutes, 10000), []);
   const getArrivals = id => GET_ARRIVALS(id, setArrivals, setApiArrivalError, setUpdatedOn);
-  const throttledGetArrivals = useCallback(throttle(getArrivals, 5000), []);
+  const throttledGetArrivals = useCallback(throttle(getArrivals, 10000), []);
 
   useEffect(() => { // make api calls (repeat if error occurs).
     if(apiArrivalError || apiArrivalError === null || timeStr(refreshOn)){
