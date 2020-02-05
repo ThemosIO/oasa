@@ -14,11 +14,8 @@ const api = axios.create({
   headers: { 'Access-Control-Allow-Origin': '*' },
 });
 
-const API_GET_STOP_ARRIVALS = stopCode => {
-  if(!stopCode) return;
-  source.cancel();
-  return api.get(`/?act=getStopArrivals&p1=${stopCode}`, { cancelToken: source.token });
-};
+const API_GET_STOP_ARRIVALS = stopCode => stopCode &&
+  api.get(`/?act=getStopArrivals&p1=${stopCode}`, { cancelToken: source.token });
 
 const API_GET_ROUTES_FOR_STOP = stopCode => stopCode &&
   api.get(`/?act=webRoutesForStop&p1=${stopCode}`);
@@ -42,6 +39,7 @@ export const GET_ARRIVALS = async (
       timestampCallback(new Date());
       successCallback(curatedData);
     }
+    source.cancel();
   } catch(err) {
     if(axios.isCancel(err)){
       console.error('>> GET_STOP_ARRIVALS request cancelled.');
