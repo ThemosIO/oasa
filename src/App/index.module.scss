@@ -12,5 +12,11 @@ $fg: #fff;
   align-items: center;
   justify-content: center;
   cursor: default;
+  ul {
+    list-style-type: none;
+    li {
+      padding: 0.25rem 0;
+    }
+  }
 }
 
