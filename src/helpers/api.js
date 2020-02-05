@@ -4,6 +4,8 @@ import { getStoredRoutes, updateStoredRoutes } from './localStorage';
 const obj = {};
 const arr = [];
 const func = () => {};
+const CancelToken = axios.CancelToken;
+const source = CancelToken.source();
 
 const api = axios.create({
   baseURL: '/api', // proxied through netlify.toml
@@ -11,8 +13,11 @@ const api = axios.create({
   headers: { 'Access-Control-Allow-Origin': '*' },
 });
 
-const API_GET_STOP_ARRIVALS = stopCode => stopCode &&
-  api.get(`/?act=getStopArrivals&p1=${stopCode}`);
+const API_GET_STOP_ARRIVALS = stopCode => {
+  if(!stopCode) return;
+  source.cancel();
+  return api.get(`/?act=getStopArrivals&p1=${stopCode}`, { cancelToken: source.token });
+};
 
 const API_GET_ROUTES_FOR_STOP = stopCode => stopCode &&
   api.get(`/?act=webRoutesForStop&p1=${stopCode}`);
@@ -37,8 +42,12 @@ export const GET_ARRIVALS = async (
       successCallback(curatedData);
     }
   } catch(err) {
-    errorCallback(((err || obj).response || obj).status || 404);
-    console.error('>> GET_STOP_ARRIVALS request failed.');
+    if(axios.isCancel(err)){
+      console.error('>> GET_STOP_ARRIVALS request cancelled.');
+    } else {
+      errorCallback(((err || obj).response || obj).status || 404);
+      console.error('>> GET_STOP_ARRIVALS request failed.');
+    }
   }
 };
 
