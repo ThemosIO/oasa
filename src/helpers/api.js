@@ -5,29 +5,29 @@ const obj = {};
 const arr = [];
 const func = () => {};
 
-let source = axios.CancelToken.source();
-
 const api = axios.create({
   baseURL: '/api', // proxied through netlify.toml
   timeout: 4000,
   headers: { 'Access-Control-Allow-Origin': '*' },
 });
 
-const API_GET_STOP_ARRIVALS = stopCode => stopCode &&
-  api.get(`/?act=getStopArrivals&p1=${stopCode}`, { cancelToken: source.token });
+const API_GET_STOP_ARRIVALS = ({ cancelSource, stopCode }) => stopCode &&
+  api.get(`/?act=getStopArrivals&p1=${stopCode}`, { cancelToken: cancelSource.token });
 
 const API_GET_ROUTES_FOR_STOP = stopCode => stopCode &&
   api.get(`/?act=webRoutesForStop&p1=${stopCode}`);
 
-export const GET_ARRIVALS = async (
+export const GET_ARRIVALS = async ({
+  cancelSource = axios.CancelToken.source(),
   stopCode,
   successCallback = func,
   errorCallback = func,
   timestampCallback = func,
-) => {
+}) => {
   errorCallback(null);
   try {
-    const { data } = await API_GET_STOP_ARRIVALS(stopCode);
+    const { data } = await API_GET_STOP_ARRIVALS({ cancelSource, stopCode });
+    cancelSource.cancel(); // cancel all requests with same token
     const curatedData = (data || arr)
       .filter(arrival => arrival.route_code != null && arrival.btime2 != null)
       .map(arrival => ({
@@ -37,8 +37,6 @@ export const GET_ARRIVALS = async (
     if(curatedData.length > 0) {
       timestampCallback(new Date());
       successCallback(curatedData);
-      source.cancel(); // cancel all requests with same token
-      source = axios.CancelToken.source(); // new cancel token
     }
   } catch(err) {
     if(axios.isCancel(err)){
@@ -50,11 +48,11 @@ export const GET_ARRIVALS = async (
   }
 };
 
-export const GET_ROUTES = async (
+export const GET_ROUTES = async ({
   stopCode,
   successCallback = func,
-  errorCallback = func
-) => {
+  errorCallback = func,
+}) => {
   errorCallback(null);
   try {
     const { data } = await API_GET_ROUTES_FOR_STOP(stopCode);

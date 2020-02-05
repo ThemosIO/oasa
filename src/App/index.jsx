@@ -1,3 +1,4 @@
+import axios from 'axios';
 import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getStoredRoutes } from '../helpers/localStorage';
@@ -10,6 +11,7 @@ const obj = {};
 const arr = [];
 
 const Index = () => {
+  const [getArrivalsToken, setGetArrivalsToken] = useState(axios.CancelToken.source());
   const [refreshOn, setRefreshOn] = useState(null);
   const [updatedOn, setUpdatedOn] = useState(null);
   const [apiArrivalError, setApiArrivalError] = useState(null);
@@ -17,9 +19,15 @@ const Index = () => {
   const [routes, setRoutes] = useState(getStoredRoutes());
   const timeStr = date => date instanceof Date && date.toLocaleTimeString();
 
-  const getRoutes = id => GET_ROUTES(id, setRoutes);
+  const getRoutes = id => GET_ROUTES({ stopCode: id, successCallback: setRoutes });
   const throttledGetRoutes = useCallback(throttle(getRoutes, 10000), []);
-  const getArrivals = id => GET_ARRIVALS(id, setArrivals, setApiArrivalError, setUpdatedOn);
+  const getArrivals = id => GET_ARRIVALS({
+    cancelSource: getArrivalsToken,
+    stopCode: id,
+    successCallback: setArrivals,
+    errorCallback: setApiArrivalError,
+    timestampCallback: setUpdatedOn,
+  });
   const throttledGetArrivals = useCallback(throttle(getArrivals, 10000), []);
 
   useEffect(() => { // make api calls (repeat if error occurs).
@@ -34,6 +42,7 @@ const Index = () => {
 
   const refreshHandler = () => {
     console.log('REFRESH!');
+    setGetArrivalsToken(axios.CancelToken.source()); // reset request cancels on refresh
     setRefreshOn(new Date());
   };
 
