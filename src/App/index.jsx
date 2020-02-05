@@ -67,7 +67,7 @@ const Index = () => {
         {`${stop.title}${updatedOn ? ` (updated ${updatedOn.toLocaleTimeString()})` : ''}`}
       </div>
       <ul>{curatedArrivals.map((a, i) =>
-        <li key={i}>{`${a.line}: ${a.minutes}min`}</li>)}
+        <li key={i}>{`${a.minutes}min (${a.line})`}</li>)}
       </ul>
     </div>
   );
