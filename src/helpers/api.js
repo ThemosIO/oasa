@@ -5,8 +5,8 @@ const obj = {};
 const arr = [];
 const func = () => {};
 
-const CancelToken = axios.CancelToken;
-const source = CancelToken.source();
+const Token = axios.CancelToken;
+let cancel;
 
 const api = axios.create({
   baseURL: '/api', // proxied through netlify.toml
@@ -15,7 +15,7 @@ const api = axios.create({
 });
 
 const API_GET_STOP_ARRIVALS = stopCode => stopCode &&
-  api.get(`/?act=getStopArrivals&p1=${stopCode}`, { cancelToken: source.token });
+  api.get(`/?act=getStopArrivals&p1=${stopCode}`, { cancelToken: new Token(c => cancel = c) });
 
 const API_GET_ROUTES_FOR_STOP = stopCode => stopCode &&
   api.get(`/?act=webRoutesForStop&p1=${stopCode}`);
@@ -38,7 +38,7 @@ export const GET_ARRIVALS = async (
     if(curatedData.length > 0) {
       timestampCallback(new Date());
       successCallback(curatedData);
-      source.cancel();
+      cancel();
     }
   } catch(err) {
     if(axios.isCancel(err)){
