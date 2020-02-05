@@ -24,7 +24,9 @@ const Index = () => {
 
   useEffect(() => { // make api calls (repeat if error occurs).
     (routes || arr).length === 0 && throttledGetRoutes(stop.id);
+    console.log('GONNA REFRESH?', apiArrivalError, !updatedOn, refreshOn);
     if(apiArrivalError || !updatedOn || refreshOn){
+      console.log('GONNA REFRESH!');
       throttledGetArrivals(stop.id);
     }
     setRefreshOn(null);
