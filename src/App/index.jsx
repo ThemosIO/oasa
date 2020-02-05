@@ -17,7 +17,7 @@ const Index = () => {
   const [apiArrivalError, setApiArrivalError] = useState(null);
   const [arrivals, setArrivals] = useState([]);
   const [routes, setRoutes] = useState(getStoredRoutes());
-  const timeStr = date => date instanceof Date && date.toLocaleTimeString();
+  const timeStr = date => date instanceof Date && date.getTime();
 
   const getRoutes = id => GET_ROUTES({ stopCode: id, successCallback: setRoutes });
   const throttledGetRoutes = useCallback(throttle(getRoutes, 10000), []);
@@ -55,7 +55,7 @@ const Index = () => {
 
   const curatedArrivals = useMemo(() => arrivals.map(({route = '', minutes = ''}) => {
     const foundRoute = (routes || arr).find(r => r.id === route) || obj;
-    const date = updatedOn instanceof Date && new Date(updatedOn.getTime() + (+minutes * 60000));
+    const date = updatedOn && new Date(updatedOn.getTime() + (+minutes * 60000));
     return { minutes, date, title: foundRoute.title || '', line: foundRoute.line || ''};
   }), [timeStr(updatedOn), (routes || arr).length, (arrivals || arr).length]);
 
