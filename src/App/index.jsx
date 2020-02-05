@@ -30,15 +30,17 @@ const Index = () => {
       throttledGetArrivals(stop.id);
     }
     setRefreshOn(null);
-  }, [timeStr(refreshOn), apiArrivalError]);
+  }, [timeStr(refreshOn), apiArrivalError, updatedOn]);
 
-  const refreshHandler = () => {
+  const refreshHandler = (date = Date.now()) => () => {
     console.log('REFRESH!');
-    setRefreshOn(Date.now());
+    setRefreshOn(date);
   };
 
+  const refreshLoop = () => setInterval(refreshHandler(Date.now()), refreshSec * 1000);
+
   useEffect(() => { // refresh every minute
-    const interval = setInterval(refreshHandler, refreshSec * 1000);
+    const interval = refreshLoop();
     return () => clearInterval(interval);
   }, []);
 
@@ -51,7 +53,7 @@ const Index = () => {
   console.log(updatedOn, routes, arrivals, curatedArrivals);
 
   return (
-    <div className={s.app} onClick={refreshHandler}>
+    <div className={s.app} onClick={refreshHandler(Date.now())}>
       <div>
         {`${stop.title}${updatedOn ? ` (updated ${updatedOn.toLocaleTimeString()})` : ''}`}
       </div>
