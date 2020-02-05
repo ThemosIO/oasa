@@ -9,7 +9,7 @@ const obj = {};
 const arr = [];
 
 const Index = () => {
-  const [updateTimestamp, setUpdateTimestamp] = useState('');
+  const [updatedOn, setUpdatedOn] = useState(null);
   const [apiArrivalError, setApiArrivalError] = useState(null);
   const [apiRouteError, setApiRouteError] = useState(null);
   const [arrivals, setArrivals] = useState([]);
@@ -17,7 +17,7 @@ const Index = () => {
 
   const getRoutes = id => GET_ROUTES(id, setRoutes, setApiRouteError);
   const throttledGetRoutes = useCallback(throttle(getRoutes, 10000), []);
-  const getArrivals = id => GET_ARRIVALS(id, setArrivals, setApiArrivalError, setUpdateTimestamp);
+  const getArrivals = id => GET_ARRIVALS(id, setArrivals, setApiArrivalError, setUpdatedOn);
   const throttledGetArrivals = useCallback(throttle(getArrivals, 5000), []);
 
   useEffect(() => { // make api call again if error occurs.
@@ -32,18 +32,26 @@ const Index = () => {
 
   const curatedArrivals = useMemo(() => arrivals.map(({route = '', minutes = ''}) => {
     const foundRoute = (routes || arr).find(r => r.id === route) || obj;
-    return [`${minutes || '?'}min`, `${foundRoute.line || ''} ${foundRoute.title || ''}`];
-  }), [updateTimestamp, (routes || arr).length, (arrivals || arr).length]);
+    const date = updatedOn instanceof Date
+      && new Date(updatedOn + minutes * 60000).getTime().toLocaleTimeString();
+    return { minutes, date, title: foundRoute.title || '', line: foundRoute.line || ''};
+  }), [
+    updatedOn instanceof Date && updatedOn.toLocaleTimeString(),
+    (routes || arr).length,
+    (arrivals || arr).length,
+  ]);
 
-  console.log(updateTimestamp, routes, arrivals);
+  console.log(updatedOn, routes, arrivals);
   return (
     <div className={s.app}>
       <div className={s.button} onClick={refreshHandler}>Refresh</div>
-      <p>{`${stop.title} (${stop.id})`}</p>
-      <ul>{curatedArrivals.map(a =>
-        <li key={a.join()}>{a[0]}<p>{a[1]}</p></li>)}
+      <p>{stop.title}</p>
+      <ul>{curatedArrivals.map((a, i) =>
+        <li key={i}>{`${a.line}: ${a.minutes}min`}</li>)}
       </ul>
-      {updateTimestamp && <p className={s.timestamp}>{`Last updated: ${updateTimestamp}`}</p>}
+      <p className={s.timestamp}>
+        {updatedOn ? `Last updated: ${updatedOn.toLocaleTimeString()}` : ''}
+      </p>
     </div>
   );
 };

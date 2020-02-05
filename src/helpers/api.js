@@ -33,7 +33,7 @@ export const GET_ARRIVALS = async (
         minutes: arrival.btime2,
       }));
     if(curatedData.length > 0) {
-      timestampCallback(new Date().toLocaleTimeString());
+      timestampCallback(new Date());
       successCallback(curatedData);
     }
   } catch(err) {
