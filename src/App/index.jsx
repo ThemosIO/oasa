@@ -21,7 +21,6 @@ const Index = () => {
   const throttledGetArrivals = useCallback(throttle(getArrivals, 5000), []);
 
   useEffect(() => { // make api call again if error occurs.
-    console.log('throttled useEffect');
     (apiArrivalError || apiArrivalError === null) && throttledGetArrivals(stop.id);
     (apiRouteError || apiRouteError === null) && throttledGetRoutes(stop.id);
   }, [apiArrivalError, apiRouteError]);

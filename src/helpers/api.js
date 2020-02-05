@@ -23,7 +23,6 @@ export const GET_ARRIVALS = async (
   errorCallback = func,
   timestampCallback = func,
 ) => {
-  console.log('getArrivals()');
   errorCallback(null);
   try {
     const { data } = await API_GET_STOP_ARRIVALS(stopCode);
@@ -39,7 +38,7 @@ export const GET_ARRIVALS = async (
     }
   } catch(err) {
     errorCallback(((err || obj).response || obj).status || 404);
-    console.error('GET_STOP_ARRIVALS request failed.');
+    console.error('>> GET_STOP_ARRIVALS request failed.');
   }
 };
 
@@ -48,7 +47,6 @@ export const GET_ROUTES = async (
   successCallback = func,
   errorCallback = func
 ) => {
-  console.log('getRoutes()');
   errorCallback(null);
   try {
     const { data } = await API_GET_ROUTES_FOR_STOP(stopCode);
@@ -65,6 +63,6 @@ export const GET_ROUTES = async (
     }
   } catch(err) {
     errorCallback(((err || obj).response || obj).status || 404);
-    console.error('GET_ROUTES_FOR_STOP request failed.');
+    console.error('>> GET_ROUTES_FOR_STOP request failed.');
   }
 };
