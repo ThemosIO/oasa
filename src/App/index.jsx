@@ -32,12 +32,12 @@ const Index = () => {
     setRefreshOn(null);
   }, [timeStr(refreshOn), apiArrivalError, updatedOn]);
 
-  const refreshHandler = (date = Date.now()) => () => {
+  const refreshHandler = () => {
     console.log('REFRESH!');
-    setRefreshOn(date);
+    setRefreshOn(new Date.now());
   };
 
-  const refreshLoop = () => setInterval(refreshHandler(Date.now()), refreshSec * 1000);
+  const refreshLoop = () => setInterval(refreshHandler, refreshSec * 1000);
 
   useEffect(() => { // refresh every minute
     const interval = refreshLoop();
@@ -53,7 +53,7 @@ const Index = () => {
   console.log(updatedOn, routes, arrivals, curatedArrivals);
 
   return (
-    <div className={s.app} onClick={refreshHandler(Date.now())}>
+    <div className={s.app} onClick={refreshHandler}>
       <div>
         {`${stop.title}${updatedOn ? ` (updated ${updatedOn.toLocaleTimeString()})` : ''}`}
       </div>
